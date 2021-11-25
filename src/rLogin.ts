@@ -5,6 +5,7 @@ import { trezorProviderOptions } from '@rsksmart/rlogin-trezor-provider'
 
 export const rLogin = new RLogin({
   providerOptions: {
+    /*
     'custom-ledger': ledgerProviderOptions,
     'custom-dcent': dcentProviderOptions,
     'custom-trezor': {
@@ -13,7 +14,7 @@ export const rLogin = new RLogin({
         manifestEmail: 'info@iovlabs.org',
         manifestAppUrl: 'https://basic-sample.rlogin.identity.rifos.org/',
       }
-    }
+    }*/
   },
   supportedChains: [31],
   rpcUrls: {

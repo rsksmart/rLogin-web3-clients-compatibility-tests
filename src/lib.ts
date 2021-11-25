@@ -1,5 +1,13 @@
 import { providers, Contract } from 'ethers'
+import Web3 from 'web3'
 import { to, value, gasPrice, gasLimit } from './constants'
+import { abi, address } from './rif'
+
+async function doAndLog(promise: Promise<any>) {
+  const result = await promise
+  console.log(result)
+  return promise
+}
 
 export interface Transactions {
   sendTransaction(): Promise<any>
@@ -12,19 +20,7 @@ export interface Transactions {
 
 export function EthersTransactions(provider: any): Transactions {
   const signer = new providers.Web3Provider(provider).getSigner()
-  const rifToken = new Contract('0x19f64674d8a5b4e652319f5e239efd3bc969a1fe', [
-    "function name() view returns (string)",
-    "function symbol() view returns (string)",
-    "function balanceOf(address) view returns (uint)",
-    "function transfer(address to, uint amount)",
-    "event Transfer(address indexed from, address indexed to, uint amount)"
-  ]).connect(signer)
-
-  async function doAndLog(promise: Promise<any>) {
-    const result = await promise
-    console.log(result)
-    return promise
-  }
+  const rifToken = new Contract(address, abi).connect(signer)
 
   function sendTransaction() {
     return doAndLog(signer.sendTransaction({
@@ -54,6 +50,50 @@ export function EthersTransactions(provider: any): Transactions {
 
   function sendRIFWithGasLimit() {
     return doAndLog(rifToken.transfer(to, value, { gasLimit }))
+  }
+
+  return {
+    sendTransaction,
+    sendTransactionWithGasLimit,
+    sendTransactionWithGasPrice,
+    sendRIF,
+    sendRIFWithGasLimit,
+    sendRIFWithGasPrice
+  }
+}
+
+export function Web3Transactions(provider: any, from: string) {
+  const web3 = new Web3(provider)
+  const rifToken = new web3.eth.Contract(abi as any, address)
+
+  function sendTransaction() {
+    return doAndLog(web3.eth.sendTransaction({
+      from, to, value
+    }))
+  }
+
+  function sendTransactionWithGasPrice() {
+    return doAndLog(web3.eth.sendTransaction({
+      from, to, value, gasPrice
+    }))
+  }
+
+  function sendTransactionWithGasLimit() {
+    return doAndLog(web3.eth.sendTransaction({
+      from, to, value, gas: gasLimit
+    }))
+  }
+
+  function sendRIF() {
+    return doAndLog(rifToken.methods.transfer(to, value).send({ from }))
+  }
+
+  function sendRIFWithGasPrice() {
+    return doAndLog(rifToken.methods.transfer(to, value).send({ from, gasPrice }))
+  }
+
+  function sendRIFWithGasLimit() {
+    return doAndLog(rifToken.methods.transfer(to, value).send({ from, gas: gasLimit }))
   }
 
   return {
