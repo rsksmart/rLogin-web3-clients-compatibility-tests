@@ -12,3 +12,5 @@ Run the app:
 yarn
 yarn start
 ```
+
+> Note: `@rsksmart/rlogin-ledger-provider` is under test. We are using `yarn link` to link the dependency. Please build [`@rsksmart/rLogin-providers`](https://github.com/rsksmart/rlogin-providers) and link the peer dep.
