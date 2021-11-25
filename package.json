@@ -1,6 +1,7 @@
 {
   "name": "rlogin-sample-app-2",
   "version": "0.1.0",
+  "homepage": ".",
   "private": true,
   "dependencies": {
     "@rsksmart/rlogin": "^1.3.0-beta.3",
