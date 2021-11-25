@@ -1,12 +1,14 @@
 import RLogin from '@rsksmart/rlogin'
+/*
 import { ledgerProviderOptions } from '@rsksmart/rlogin-ledger-provider'
 import { dcentProviderOptions } from '@rsksmart/rlogin-dcent-provider'
 import { trezorProviderOptions } from '@rsksmart/rlogin-trezor-provider'
+*/
 
 export const rLogin = new RLogin({
   providerOptions: {
-    'custom-ledger': ledgerProviderOptions,
     /*
+    'custom-ledger': ledgerProviderOptions,
     'custom-dcent': dcentProviderOptions,
     'custom-trezor': {
       ...trezorProviderOptions,
