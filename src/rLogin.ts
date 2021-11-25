@@ -5,8 +5,8 @@ import { trezorProviderOptions } from '@rsksmart/rlogin-trezor-provider'
 
 export const rLogin = new RLogin({
   providerOptions: {
-    /*
     'custom-ledger': ledgerProviderOptions,
+    /*
     'custom-dcent': dcentProviderOptions,
     'custom-trezor': {
       ...trezorProviderOptions,
