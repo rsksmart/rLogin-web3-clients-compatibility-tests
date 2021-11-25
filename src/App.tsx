@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import './App.css';
 
 import { rLogin } from './rLogin'
-import { Transactions, EthersTransactions, Web3Transactions } from './lib'
+import { Transactions, EthersTransactions, Web3Transactions, DirectlyProvider } from './lib'
 import { to, value, gasPrice, gasLimit } from './constants'
 
 const TransactionsComponent: React.FC<{ transactions: Transactions }> = ({ transactions }) => <>
@@ -40,6 +40,7 @@ function App() {
 
   const ethersTransactions = state.provider ? EthersTransactions(state.provider) : null
   const web3Transactions = state.provider ? Web3Transactions(state.provider, state.address) : null
+  const providerTransactions = state.provider ? DirectlyProvider(state.provider, state.address) : null
 
   return (
     <div className="App">
@@ -88,6 +89,7 @@ function App() {
         {web3Transactions && <TransactionsComponent transactions={web3Transactions} />}
         <hr />
         <h2>Using directly the <code>provider</code></h2>
+        {providerTransactions && <TransactionsComponent transactions={providerTransactions} />}
     </div>
   );
 }

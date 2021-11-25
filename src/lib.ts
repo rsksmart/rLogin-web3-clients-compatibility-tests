@@ -1,4 +1,4 @@
-import { providers, Contract } from 'ethers'
+import { providers, Contract, utils } from 'ethers'
 import Web3 from 'web3'
 import { to, value, gasPrice, gasLimit } from './constants'
 import { abi, address } from './rif'
@@ -94,6 +94,54 @@ export function Web3Transactions(provider: any, from: string) {
 
   function sendRIFWithGasLimit() {
     return doAndLog(rifToken.methods.transfer(to, value).send({ from, gas: gasLimit }))
+  }
+
+  return {
+    sendTransaction,
+    sendTransactionWithGasLimit,
+    sendTransactionWithGasPrice,
+    sendRIF,
+    sendRIFWithGasLimit,
+    sendRIFWithGasPrice
+  }
+}
+
+export function DirectlyProvider(provider: any, from: string) {
+  const requestSendTransaction = (txPayload: any) => provider.request({
+    method: 'eth_sendTransaction',
+    params: [txPayload]
+  })
+
+  function sendTransaction() {
+    return doAndLog(requestSendTransaction({ from, to, value }))
+  }
+
+  function sendTransactionWithGasPrice() {
+    return doAndLog(requestSendTransaction({
+      from, to, value, gasPrice
+    }))
+  }
+
+  function sendTransactionWithGasLimit() {
+    return doAndLog(requestSendTransaction({
+      from, to, value, gas: gasLimit
+    }))
+  }
+
+  const rifInterface = new utils.Interface(abi)
+
+  const data = rifInterface.encodeFunctionData('transfer', [to, value])
+
+  function sendRIF() {
+    return doAndLog(requestSendTransaction({ from, to: address, data }))
+  }
+
+  function sendRIFWithGasPrice() {
+    return doAndLog(requestSendTransaction({ from, to: address, data, gasPrice }))
+  }
+
+  function sendRIFWithGasLimit() {
+    return doAndLog(requestSendTransaction({ from, to: address, data, gas: gasLimit }))
   }
 
   return {
