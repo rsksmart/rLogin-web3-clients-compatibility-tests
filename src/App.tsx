@@ -5,6 +5,13 @@ import { rLogin } from './rLogin'
 import { Transactions, EthersTransactions, Web3Transactions, DirectlyProvider } from './lib'
 import { to, value, gasPrice, gasLimit } from './constants'
 
+const initialState = {
+  address: '',
+  chainId: '',
+  provider: null,
+  disconnect: () => {}
+}
+
 const TransactionsComponent: React.FC<{ transactions: Transactions }> = ({ transactions }) => <>
   <h3>RBTC transactions</h3>
   <p><button onClick={transactions.sendTransaction}>send RBTC</button></p>
@@ -21,21 +28,24 @@ function App() {
     address: string
     chainId: string
     provider: any
-  }>({
-    address: '',
-    chainId: '',
-    provider: null
-  })
+    disconnect: () => void
+  }>(initialState)
 
   const connect = async () => {
-    const { provider } = await rLogin.connect()
+    const { provider, disconnect } = await rLogin.connect()
 
     const [accounts, chainId] = await Promise.all([
       provider.request({ method: 'eth_accounts' }),
       provider.request({ method: 'eth_chainId' })
     ])
 
-    setState({ address: accounts[0], chainId, provider })
+    setState({ address: accounts[0], chainId, provider, disconnect })
+  }
+
+  const disconnect = () => {
+    state.disconnect()
+
+    setState(initialState)
   }
 
   const ethersTransactions = state.provider ? EthersTransactions(state.provider) : null
@@ -47,6 +57,7 @@ function App() {
       <h1>Welcome to rLogin</h1>
       <p>This app serves for testing different payloads with rLogin compatible wallets. Currently, our suit includes sending RBTC and ERC20 using different gas options</p>
       <button onClick={connect} disabled={!!state.address}>connect</button>
+      <button onClick={disconnect} disabled={!state.address}>disconnect</button>
         <p>Address: {state.address}</p>
         <p>Chain id: {state.chainId}</p>
         <p>Transaction payload:</p>
