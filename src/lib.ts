@@ -62,9 +62,10 @@ export function EthersTransactions(provider: any): Transactions {
   }
 }
 
-export function Web3Transactions(provider: any, from: string) {
+export function Web3Transactions(provider: any, _from: string) {
   const web3 = new Web3(provider)
   const rifToken = new web3.eth.Contract(abi as any, address)
+  const from = _from.toLowerCase()
 
   function sendTransaction() {
     return doAndLog(web3.eth.sendTransaction({
