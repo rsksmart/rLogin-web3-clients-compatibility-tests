@@ -5,6 +5,7 @@ import { dcentProviderOptions } from '@rsksmart/rlogin-dcent-provider'
 import { trezorProviderOptions } from '@rsksmart/rlogin-trezor-provider'
 
 const rpcUrls = {
+  30: 'https://public-node.rsk.co',
   31: 'https://public-node.testnet.rsk.co'
 }
 
