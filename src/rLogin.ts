@@ -11,13 +11,20 @@ const rpcUrls = {
 
 export const rLogin = new RLogin({
   providerOptions: {
-    'custom-ledger': ledgerProviderOptions,
-    'custom-dcent': dcentProviderOptions,
+    'custom-ledger': {
+      ...ledgerProviderOptions,
+      options: { debug: true }
+    },
+    'custom-dcent': {
+      ...dcentProviderOptions,
+      options: { debug: true }
+    },
     'custom-trezor': {
       ...trezorProviderOptions,
       options: {
         manifestEmail: 'info@iovlabs.org',
         manifestAppUrl: 'https://rsksmart.github.io/rLogin-web3-clients-compatibility-tests/',
+        debug: true
       }
     },
     walletconnect: {

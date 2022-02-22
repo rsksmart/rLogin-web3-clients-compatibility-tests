@@ -13,6 +13,7 @@ export interface Transactions {
   sendTransaction(): Promise<any>
   sendTransactionWithGasLimit(): Promise<any>
   sendTransactionWithGasPrice(): Promise<any>
+  sendTransactionWithNoValue(): Promise<any>
   sendRIF(): Promise<any>
   sendRIFWithGasLimit(): Promise<any>
   sendRIFWithGasPrice(): Promise<any>
@@ -40,6 +41,10 @@ export function EthersTransactions(provider: any): Transactions {
     }))
   }
 
+  function sendTransactionWithNoValue() {
+    return doAndLog(signer.sendTransaction({ to }))
+  }
+
   function sendRIF() {
     return doAndLog(rifToken.transfer(to, value))
   }
@@ -56,13 +61,14 @@ export function EthersTransactions(provider: any): Transactions {
     sendTransaction,
     sendTransactionWithGasLimit,
     sendTransactionWithGasPrice,
+    sendTransactionWithNoValue,
     sendRIF,
     sendRIFWithGasLimit,
     sendRIFWithGasPrice
   }
 }
 
-export function Web3Transactions(provider: any, _from: string) {
+export function Web3Transactions(provider: any, _from: string): Transactions {
   const web3 = new Web3(provider)
   const rifToken = new web3.eth.Contract(abi as any, address)
   const from = _from.toLowerCase()
@@ -85,6 +91,12 @@ export function Web3Transactions(provider: any, _from: string) {
     }))
   }
 
+  function sendTransactionWithNoValue() {
+    return doAndLog(web3.eth.sendTransaction({
+      from, to
+    }))
+  }
+
   function sendRIF() {
     return doAndLog(rifToken.methods.transfer(to, value).send({ from }))
   }
@@ -101,13 +113,14 @@ export function Web3Transactions(provider: any, _from: string) {
     sendTransaction,
     sendTransactionWithGasLimit,
     sendTransactionWithGasPrice,
+    sendTransactionWithNoValue,
     sendRIF,
     sendRIFWithGasLimit,
     sendRIFWithGasPrice
   }
 }
 
-export function DirectlyProvider(provider: any, from: string) {
+export function DirectlyProvider(provider: any, from: string): Transactions {
   const requestSendTransaction = (txPayload: any) => provider.request({
     method: 'eth_sendTransaction',
     params: [txPayload]
@@ -127,6 +140,10 @@ export function DirectlyProvider(provider: any, from: string) {
     return doAndLog(requestSendTransaction({
       from, to, value, gas: gasLimit
     }))
+  }
+
+  function sendTransactionWithNoValue() {
+    return doAndLog(requestSendTransaction({ from, to }))
   }
 
   const rifInterface = new utils.Interface(abi)
@@ -149,6 +166,7 @@ export function DirectlyProvider(provider: any, from: string) {
     sendTransaction,
     sendTransactionWithGasLimit,
     sendTransactionWithGasPrice,
+    sendTransactionWithNoValue,
     sendRIF,
     sendRIFWithGasLimit,
     sendRIFWithGasPrice

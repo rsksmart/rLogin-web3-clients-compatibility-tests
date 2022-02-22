@@ -17,6 +17,7 @@ const TransactionsComponent: React.FC<{ transactions: Transactions }> = ({ trans
   <p><button onClick={transactions.sendTransaction}>send RBTC</button></p>
   <p><button onClick={transactions.sendTransactionWithGasPrice}>Send RBTC with custom gas price</button></p>
   <p><button onClick={transactions.sendTransactionWithGasLimit}>Send RBTC with custom gas limit</button></p>
+  <p><button onClick={transactions.sendTransactionWithNoValue}>Send no RBTC</button></p>
   <h3>RIF transactions</h3>
   <p><button onClick={transactions.sendRIF}>send RIF</button></p>
   <p><button onClick={transactions.sendRIFWithGasPrice}>Send RIF with custom gas price</button></p>
